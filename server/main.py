@@ -228,12 +228,30 @@ def get_recent_transactions():
     return recent_transactions
 
 @app.get("/api/reports/quarterly")
-def get_quarterly_reports():
+def get_quarterly_reports(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
     """Get quarterly performance reports"""
+    # Filter orders before aggregation
+    filtered = list(orders)
+    if warehouse and warehouse != 'all':
+        filtered = [o for o in filtered if o.get('warehouse') == warehouse]
+    if category and category != 'all':
+        filtered = [o for o in filtered if any(
+            item.get('category', '').lower() == category.lower() for item in o.get('items', [])
+        )]
+    if status and status != 'all':
+        filtered = [o for o in filtered if o.get('status', '').lower() == status.lower()]
+    if month and month != 'all':
+        filtered = filter_by_month(filtered, month)
+
     # Calculate quarterly statistics from orders
     quarters = {}
 
-    for order in orders:
+    for order in filtered:
         order_date = order.get('order_date', '')
         # Determine quarter
         if '2025-01' in order_date or '2025-02' in order_date or '2025-03' in order_date:
@@ -274,11 +292,29 @@ def get_quarterly_reports():
     return result
 
 @app.get("/api/reports/monthly-trends")
-def get_monthly_trends():
+def get_monthly_trends(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
     """Get month-over-month trends"""
+    # Filter orders before aggregation
+    filtered = list(orders)
+    if warehouse and warehouse != 'all':
+        filtered = [o for o in filtered if o.get('warehouse') == warehouse]
+    if category and category != 'all':
+        filtered = [o for o in filtered if any(
+            item.get('category', '').lower() == category.lower() for item in o.get('items', [])
+        )]
+    if status and status != 'all':
+        filtered = [o for o in filtered if o.get('status', '').lower() == status.lower()]
+    if month and month != 'all':
+        filtered = filter_by_month(filtered, month)
+
     months = {}
 
-    for order in orders:
+    for order in filtered:
         order_date = order.get('order_date', '')
         if not order_date:
             continue
