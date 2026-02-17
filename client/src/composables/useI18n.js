@@ -90,6 +90,11 @@ export function useI18n() {
     return customerName
   }
 
+  // Translate priority values
+  const translatePriority = (priority) => {
+    return t(`priority.${priority}`)
+  }
+
   // Translate warehouse names
   const translateWarehouse = (warehouseName) => {
     if (currentLocale.value === 'ja') {
@@ -123,6 +128,7 @@ export function useI18n() {
     localeName,
     translateProductName,
     translateCustomerName,
+    translatePriority,
     translateWarehouse
   }
 }
