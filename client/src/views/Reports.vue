@@ -24,8 +24,8 @@
                 <th>Fulfillment Rate</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(q, index) in quarterlyData" :key="index">
+            <tbody v-if="quarterlyData.length > 0">
+              <tr v-for="q in quarterlyData" :key="q.quarter">
                 <td><strong>{{ q.quarter }}</strong></td>
                 <td>{{ q.total_orders }}</td>
                 <td>${{ formatNumber(q.total_revenue) }}</td>
@@ -37,6 +37,9 @@
                 </td>
               </tr>
             </tbody>
+            <tbody v-if="quarterlyData.length === 0">
+              <tr><td colspan="5" class="empty-state">No quarterly data available</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -47,8 +50,8 @@
           <h3 class="card-title">Monthly Revenue Trend</h3>
         </div>
         <div class="chart-container">
-          <div class="bar-chart">
-            <div v-for="(month, index) in monthlyData" :key="index" class="bar-wrapper">
+          <div v-if="monthlyData.length > 0" class="bar-chart">
+            <div v-for="month in monthlyData" :key="month.month" class="bar-wrapper">
               <div class="bar-container">
                 <div
                   class="bar"
@@ -59,6 +62,7 @@
               <div class="bar-label">{{ formatMonth(month.month) }}</div>
             </div>
           </div>
+          <div v-if="monthlyData.length === 0" class="empty-state">No monthly data available</div>
         </div>
       </div>
 
@@ -78,8 +82,8 @@
                 <th>Growth Rate</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(month, index) in monthlyData" :key="index">
+            <tbody v-if="monthlyData.length > 0">
+              <tr v-for="(month, index) in monthlyData" :key="month.month">
                 <td><strong>{{ formatMonth(month.month) }}</strong></td>
                 <td>{{ month.order_count }}</td>
                 <td>${{ formatNumber(month.revenue) }}</td>
@@ -96,6 +100,9 @@
                   <span v-else>-</span>
                 </td>
               </tr>
+            </tbody>
+            <tbody v-if="monthlyData.length === 0">
+              <tr><td colspan="5" class="empty-state">No monthly data available</td></tr>
             </tbody>
           </table>
         </div>
@@ -278,10 +285,10 @@ export default {
 
 .card {
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
 }
 
 .card-header {
@@ -359,7 +366,6 @@ export default {
 }
 
 .bar-label {
-  margin-top: 0.5rem;
   font-size: 0.75rem;
   color: #64748b;
   text-align: center;
@@ -377,9 +383,9 @@ export default {
 
 .stat-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
   border-left: 4px solid #3b82f6;
 }
 
@@ -397,7 +403,7 @@ export default {
 
 .badge {
   padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
+  border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -439,5 +445,11 @@ export default {
   padding: 1rem;
   border-radius: 8px;
   margin: 1rem 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #64748b;
 }
 </style>
