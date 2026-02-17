@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { api } from '../api'
 
 export default {
@@ -132,6 +132,14 @@ export default {
     )
 
     const budgetRemaining = computed(() => budget.value - totalCost.value)
+
+    // Clear stale recommendations when budget changes so summary cards stay accurate
+    watch(budget, () => {
+      if (recommendations.value.length > 0) {
+        recommendations.value = []
+        hasSearched.value = false
+      }
+    })
 
     const formatCurrency = (value) =>
       '$' + value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
