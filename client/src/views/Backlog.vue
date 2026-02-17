@@ -163,3 +163,64 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.backlog {
+  padding: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1.25rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.313rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.badge.high {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.badge.medium {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.badge.low {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+</style>
